@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+       <!-- ----------------------------------------------------------
+       Layout classes : site-header, site-nav, hero, section-intro,
+                        card-grid, card, space-card, form-grid, field,
+                        table-wrap, btn, btn-primary, btn-secondary,
+                        skip-link, message, notice
+       Status classes : status-confirmed, status-pending, status-cancelled,
+                        status-available, status-maintenance
+       Role classes   : role-guest, role-member, role-admin  (JS shows/hides)
+       Forms (ids)    : login-form, register-form, booking-form,
+                        space-form, search-form, contact-form
+       Tables (ids)   : bookings-table, spaces-table, report-table
+       Messages (ids) : login-message, register-message, booking-message,
+                        space-message, contact-message, search-result-count,
+                        notification-list, toast
+       Dashboard (ids): stat-total, stat-confirmed, stat-pending,
+                        stat-cancelled, occupancy-meter, approvals-progress,
+                        current-role
+       ========================================================== --> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CoSpace is a coworking space management portal where members can browse spaces, book desks and rooms, and track booking status, while admins manage spaces and view reports.">
+  <meta name="keywords" content="coworking, space management, desk booking, meeting room, dashboard, HTML, CSS, JavaScript">
+  <meta name="author" content="Code Crew - Aparajita Singh Raghuvanshi, Swadha Sharma, Arshita Jain">
+  <title>CoSpace | Coworking Space Management</title>
+  <link rel="icon" type="image/x-icon" href="favicon.png">
+  <link rel="stylesheet" href="style.css">
+  
+</head>
+
+<body id="top">
+  <!-- Skip link: first focusable element, jumps straight to main content -->
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <p id="toast" class="message" aria-live="polite" hidden></p>
+
+  <!--HEADER n NAVIGATION-->
+  <header class="site-header">
+    <p class="logo"><a href="#home" title="CoSpace home"><strong>CoSpace</strong> <small>Coworking Space Management</small></a></p>
+
+    <nav class="site-nav" aria-label="Primary navigation">
+      <button type="button" id="menu-toggle" aria-label="Toggle menu" aria-expanded="true" aria-controls="menu-list">&#9776;</button>
+      <ul id="menu-list">
+        <li><a href="#home" aria-current="page">Home</a></li>
+        <li><a href="#how-it-works">How it works</a></li>
+        <li><a href="#spaces">Spaces</a></li>
+        <li><a href="#book">Book a space</a></li>
+        <li><a href="#bookings">Bookings</a></li>
+        <li><a href="#dashboard">Dashboard</a></li>
+        <li><a href="#reports">Reports</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#account" class="btn btn-primary">Login / Register</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ===================== MAIN CONTENT (only one main) ===================== -->
+  <main id="main">
+
+    <!-- ---------- HERO ---------- -->
+    <section id="home" class="hero" aria-labelledby="hero-title">
+      <article class="hero-text">
+        <h1 id="hero-title">Find a desk. Book a room. Get to work.</h1>
+        <p>CoSpace brings every desk, meeting room and private office into <mark>one place</mark>. Members book in minutes, staff track every request, and admins see the whole picture.</p>
+        <p>
+          <a href="#book" class="btn btn-primary">Book a space</a>
+          <a href="#spaces" class="btn btn-secondary">Browse spaces</a>
+        </p>
+        <p><small>Open <time datetime="08:00">8:00 AM</time> to <time datetime="22:00">10:00 PM</time>, Monday to Saturday.</small></p>
+      </article>
+
+      <figure class="hero-figure">
+        <img src="images/shared workspace.jpeg"
+             sizes="(max-width: 600px) 100vw, 50vw"
+             alt="Illustration of a bright shared workspace with desks and monitors"
+             width="800" height="450">
+        <figcaption>Fig 1. A shared workspace at CoSpace</figcaption>
+      </figure>
+    </section>
+
+    <hr>
+
+    <!-- ---------- HOW IT WORKS ---------- -->
+    <section id="how-it-works" aria-labelledby="how-title">
+      <h2 id="how-title">How it works</h2>
+      <p class="section-intro">CoSpace replaces spreadsheets and paper records with one connected workflow.</p>
+
+      <div class="card-grid">
+        <article class="card">
+          <h3>Booking steps</h3>
+          <ol>
+            <li>Register or log in
+              <ul>
+                <li>Choose your role: member, staff or admin</li>
+                <li>Complete your profile</li>
+              </ul>
+            </li>
+            <li>Pick a space
+              <ul>
+                <li>Search by name or filter by type and price</li>
+                <li>Check availability for your date</li>
+              </ul>
+            </li>
+            <li>Submit the booking form</li>
+            <li>Receive a confirmation and track the status</li>
+          </ol>
+        </article>
+
+        <article class="card">
+          <h3>Who can do what</h3>
+          <dl>
+            <dt>Member</dt>
+            <dd>Books spaces, edits or cancels their own bookings and views their dashboard.</dd>
+            <dt>Staff</dt>
+            <dd>Reviews booking requests and updates their status.</dd>
+            <dt>Admin</dt>
+            <dd>Adds, edits and removes spaces, and views reports for the whole centre.</dd>
+          </dl>
+        </article>
+
+        <article class="card">
+          <h3>Coworking terms</h3>
+          <p><dfn id="def-hot-desk">Hot desk</dfn> means any free desk in the shared area, used on a first-come basis.</p>
+          <p><dfn id="def-dedicated-desk">Dedicated desk</dfn> means a desk reserved for one member for the whole month.</p>
+          <p>See the <a href="#spaces">spaces</a> section for prices and capacity.</p>
+        </article>
+      </div>
+    </section>
+
+    <hr>
+
+    <!-- ---------- SPACES + SEARCH / FILTER ---------- -->
+    <section id="spaces" aria-labelledby="spaces-title">
+      <h2 id="spaces-title">Our spaces</h2>
+      <p class="section-intro">Four space types, from a single desk for the day to a private office for your team.</p>
+
+      <form id="search-form" name="search-form" action="" method="get" autocomplete="on">
+        <fieldset>
+          <legend>Search and filter spaces</legend>
+          <div class="form-grid">
+            <p class="field">
+              <label for="search-text">Search by name</label>
+              <input type="search" id="search-text" name="q" list="space-names" placeholder="e.g. Meeting Room" maxlength="40">
+              <datalist id="space-names">
+                <option value="Hot Desk">
+                <option value="Dedicated Desk">
+                <option value="Meeting Room">
+                <option value="Private Office">
+              </datalist>
+            </p>
+
+            <p class="field">
+              <label for="filter-type">Space type</label>
+              <select id="filter-type" name="type">
+                <option value="all" selected>All spaces</option>
+                <optgroup label="Desks">
+                  <option value="hot-desk">Hot Desk</option>
+                  <option value="dedicated-desk">Dedicated Desk</option>
+                </optgroup>
+                <optgroup label="Rooms">
+                  <option value="meeting-room">Meeting Room</option>
+                  <option value="private-office">Private Office</option>
+                </optgroup>
+              </select>
+            </p>
+
+            <p class="field">
+              <label for="filter-price">Maximum price (Rs.)</label>
+              <input type="number" id="filter-price" name="max-price" min="0" max="50000" step="100" placeholder="e.g. 5000">
+            </p>
+
+            <p class="field">
+              <input type="checkbox" id="filter-available" name="available" value="yes">
+              <label for="filter-available">Show available spaces only</label>
+            </p>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Search</button>
+          <button type="reset" class="btn btn-secondary">Clear filters</button>
+        </fieldset>
+      </form>
+
+      <p id="search-result-count" aria-live="polite">Showing 4 of 4 spaces</p>
+
+      <div class="card-grid" id="space-list">
+
+        <!-- Hot Desk -->
+        <article class="card space-card type-desk" id="space-hot-desk">
+          <figure>
+            <img src="images/hot-desk.jpeg" alt="Row of hot desks with monitors in a shared area" width="600" height="400">
+            <figcaption>Fig 2. Hot Desk area</figcaption>
+          </figure>
+          <h3>Hot Desk</h3>
+          <p>Pick any free desk in the shared area. Wi-Fi and tea included.</p>
+          <table>
+            <caption>Hot Desk details</caption>
+            <thead>
+              <tr>
+                <th scope="col">Price</th>
+                <th scope="col">Capacity</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Rs. 400 per day</td>
+                <td>30 seats</td>
+                <td class="status-available">Available</td>
+              </tr>
+            </tbody>
+          </table>
+          <p><a href="#book" class="btn btn-primary" title="Book a Hot Desk">Book this space</a></p>
+        </article>
+
+        <!-- Dedicated Desk -->
+        <article class="card space-card type-desk" id="space-dedicated-desk">
+          <figure>
+            <img src="images/dedicated-desk.jpeg" alt="Two dedicated desks, each with a monitor and a plant" width="600" height="400">
+            <figcaption>Fig 3. Dedicated Desk zone</figcaption>
+          </figure>
+          <h3>Dedicated Desk</h3>
+          <p>Your own desk and lockable storage, available any time the centre is open.</p>
+          <table>
+            <caption>Dedicated Desk details</caption>
+            <thead>
+              <tr>
+                <th scope="col">Price</th>
+                <th scope="col">Capacity</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Rs. 6,500 per month</td>
+                <td>20 desks</td>
+                <td class="status-available">Available</td>
+              </tr>
+            </tbody>
+          </table>
+          <p><a href="#book" class="btn btn-primary" title="Book a Dedicated Desk">Book this space</a></p>
+        </article>
+
+        <!-- Meeting Room -->
+        <article class="card space-card type-room" id="space-meeting-room">
+          <figure>
+            <img src="images/meeting-room.jpeg" alt="Meeting room with a long table, chairs and a whiteboard" width="600" height="400">
+            <figcaption>Fig 4. Meeting Room</figcaption>
+          </figure>
+          <h3>Meeting Room</h3>
+          <p>A 250 ft<sup>2</sup> room with a whiteboard and projector for up to 10 people.</p>
+          <table>
+            <caption>Meeting Room details</caption>
+            <thead>
+              <tr>
+                <th scope="col">Price</th>
+                <th scope="col">Capacity</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Rs. 600 per hour</td>
+                <td>10 people</td>
+                <td class="status-available">Available</td>
+              </tr>
+            </tbody>
+          </table>
+          <p><a href="#book" class="btn btn-primary" title="Book a Meeting Room">Book this space</a></p>
+        </article>
+
+        <!-- Private Office -->
+        <article class="card space-card type-room" id="space-private-office">
+          <figure>
+            <img src="images/private-office.jpeg" alt="Private office with a desk, a large window and a plant" width="600" height="400">
+            <figcaption>Fig 5. Private Office</figcaption>
+          </figure>
+          <h3>Private Office</h3>
+          <p>A lockable 120 ft<sup>2</sup> office for a small team of up to 4 people.</p>
+          <table>
+            <caption>Private Office details</caption>
+            <thead>
+              <tr>
+                <th scope="col">Price</th>
+                <th scope="col">Capacity</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><del>Rs. 20,000</del> <ins>Rs. 18,000</ins> per month</td>
+                <td>4 people</td>
+                <td class="status-maintenance">Under maintenance</td>
+              </tr>
+            </tbody>
+          </table>
+          <p><a href="#book" class="btn btn-secondary" title="Book a Private Office">Join the waitlist</a></p>
+        </article>
+      </div>
+
+      <p><small>All prices include taxes. Prices and availability can change; the booking form shows the final amount.</small></p>
+    </section>
+
+    <hr>
+
+    <!-- ---------- ACCOUNT: LOGIN + REGISTER ---------- -->
+    <section id="account" aria-labelledby="account-title">
+      <h2 id="account-title">Your account</h2>
+      <p class="section-intro">Log in to manage bookings, or register in under a minute. <strong>Current role:</strong> <span id="current-role">Guest</span></p>
+
+      <div class="card-grid">
+
+        <!-- LOGIN -->
+        <article class="card role-guest">
+          <h3 id="login-title">Log in</h3>
+          <form id="login-form" name="login-form" action="" method="post" autocomplete="on" aria-labelledby="login-title">
+            <fieldset>
+              <legend>Login details</legend>
+
+              <p class="field">
+                <label for="login-email">Email</label>
+                <input type="email" id="login-email" name="email" placeholder="you@example.com" required>
+              </p>
+
+              <p class="field">
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password" name="password" maxlength="12" required aria-describedby="login-help">
+                <small id="login-help">Use the password you set at registration.</small>
+              </p>
+
+              <p class="field">
+                <label for="login-role">Log in as</label>
+                <select id="login-role" name="role" required>
+                  <option value="member" selected>Member</option>
+                  <option value="staff">Staff</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </p>
+
+              <p class="field">
+                <input type="checkbox" id="remember" name="remember" value="yes">
+                <label for="remember">Keep me logged in on this device</label>
+              </p>
+            </fieldset>
+
+            <button type="submit" class="btn btn-primary">Log in</button>
+            <button type="reset" class="btn btn-secondary">Reset</button>
+            <p id="login-message" class="message" aria-live="polite"></p>
+          </form>
+        </article>
+
+        <!-- REGISTER -->
+        <article class="card role-guest">
+          <h3 id="register-title">Register</h3>
+          <form id="register-form" name="register-form" action="" method="post" enctype="multipart/form-data" autocomplete="on" aria-labelledby="register-title">
+
+            <fieldset>
+              <legend>Personal details</legend>
+
+              <p class="field">
+                <label for="reg-name">Full name</label>
+                <input type="text" id="reg-name" name="fullname" placeholder="Enter your full name" pattern="[A-Za-z ]{3,40}" maxlength="40" required>
+              </p>
+
+              <p class="field">
+                <label for="reg-email">Email</label>
+                <input type="email" id="reg-email" name="email" placeholder="you@example.com" required>
+              </p>
+
+              <p class="field">
+                <label for="reg-phone">Phone number</label>
+                <input type="tel" id="reg-phone" name="phone" placeholder="10-digit mobile number" pattern="[0-9]{10}" maxlength="10" required>
+              </p>
+
+              <p class="field">
+                <label for="reg-city">City</label>
+                <input type="text" id="reg-city" name="city" list="cities" placeholder="Start typing your city">
+                <datalist id="cities">
+                  <option value="Amritsar">
+                  <option value="Jalandhar">
+                  <option value="Ludhiana">
+                  <option value="Chandigarh">
+                  <option value="Delhi">
+                </datalist>
+              </p>
+
+              <p class="field">
+                <label for="reg-photo">Profile photo</label>
+                <input type="file" id="reg-photo" name="photo" accept=".jpg,.png">
+              </p>
+            </fieldset>
+
+            <fieldset>
+              <legend>Security</legend>
+
+              <p class="field">
+                <label for="reg-password">Password</label>
+                <input type="password" id="reg-password" name="password" pattern="[A-Za-z0-9@#$%]{8,12}" maxlength="12" required aria-describedby="reg-password-help">
+                <small id="reg-password-help">8 to 12 characters: letters, numbers or @ # $ %.</small>
+              </p>
+
+              <p class="field">
+                <label for="reg-confirm">Confirm password</label>
+                <input type="password" id="reg-confirm" name="confirm" maxlength="12" required>
+              </p>
+            </fieldset>
+
+            <fieldset>
+              <legend>Role and plan</legend>
+
+              <p>Select your role:</p>
+              <p class="field">
+                <input type="radio" id="role-member" name="role" value="member" checked>
+                <label for="role-member">Member</label>
+              </p>
+              <p class="field">
+                <input type="radio" id="role-staff" name="role" value="staff">
+                <label for="role-staff">Staff</label>
+              </p>
+              <p class="field">
+                <input type="radio" id="role-admin" name="role" value="admin">
+                <label for="role-admin">Admin</label>
+              </p>
+
+              <p class="field">
+                <label for="reg-plan">Preferred plan</label>
+                <select id="reg-plan" name="plan">
+                  <optgroup label="Pay as you go">
+                    <option value="day-pass" selected>Day pass (Hot Desk)</option>
+                    <option value="hourly-room">Hourly (Meeting Room)</option>
+                  </optgroup>
+                  <optgroup label="Monthly">
+                    <option value="monthly-desk">Dedicated Desk</option>
+                    <option value="monthly-office">Private Office</option>
+                  </optgroup>
+                </select>
+              </p>
+            </fieldset>
+
+            <p class="field">
+              <input type="checkbox" id="reg-terms" name="terms" value="accepted" required>
+              <label for="reg-terms">I agree to the centre rules and booking terms</label>
+            </p>
+
+            <button type="submit" class="btn btn-primary">Create account</button>
+            <button type="reset" class="btn btn-secondary">Reset</button>
+            <p id="register-message" class="message" aria-live="polite"></p>
+          </form>
+        </article>
+      </div>
+    </section>
+
+    <hr>
+
+    <!-- ---------- BOOKING FORM ---------- -->
+    <section id="book" class="role-member" aria-labelledby="book-title">
+      <h2 id="book-title">Book a space</h2>
+      <p class="section-intro">Fill in the form and we will confirm your booking. Fields marked as required must be completed.</p>
+
+      <form id="booking-form" name="booking-form" action="" method="post" enctype="multipart/form-data" autocomplete="on">
+
+        <fieldset>
+          <legend>Member details</legend>
+          <div class="form-grid">
+            <p class="field">
+              <label for="booking-id">Booking ID</label>
+              <input type="text" id="booking-id" name="booking_id" value="CS-0007" readonly>
+            </p>
+
+            <p class="field">
+              <label for="book-name">Full name</label>
+              <input type="text" id="book-name" name="fullname" placeholder="Enter your full name" maxlength="40" required>
+            </p>
+
+            <p class="field">
+              <label for="book-email">Email</label>
+              <input type="email" id="book-email" name="email" placeholder="you@example.com" required>
+            </p>
+
+            <p class="field">
+              <label for="book-phone">Phone number</label>
+              <input type="tel" id="book-phone" name="phone" placeholder="10-digit mobile number" pattern="[0-9]{10}" maxlength="10" required>
+            </p>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Space and schedule</legend>
+          <div class="form-grid">
+            <p class="field">
+              <label for="book-space">Space</label>
+              <select id="book-space" name="space" required>
+                <option value="">Choose a space</option>
+                <optgroup label="Desks">
+                  <option value="hot-desk">Hot Desk (Rs. 400 per day)</option>
+                  <option value="dedicated-desk">Dedicated Desk (Rs. 6,500 per month)</option>
+                </optgroup>
+                <optgroup label="Rooms">
+                  <option value="meeting-room">Meeting Room (Rs. 600 per hour)</option>
+                  <option value="private-office">Private Office (Rs. 18,000 per month)</option>
+                </optgroup>
+              </select>
+            </p>
+
+            <p class="field">
+              <label for="book-date">Date</label>
+              <input type="date" id="book-date" name="date" min="2026-11-23" max="2027-03-31" required>
+            </p>
+
+            <p class="field">
+              <label for="book-start">Start time</label>
+              <input type="time" id="book-start" name="start_time" required>
+            </p>
+
+            <p class="field">
+              <label for="book-end">End time</label>
+              <input type="time" id="book-end" name="end_time" required>
+            </p>
+
+            <p class="field">
+              <label for="book-people">Number of people</label>
+              <input type="number" id="book-people" name="people" min="1" max="20" step="1" value="1" required>
+            </p>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Plan and add-ons</legend>
+
+          <p>Billing plan:</p>
+          <p class="field">
+            <input type="radio" id="plan-hourly" name="plan" value="hourly">
+            <label for="plan-hourly">Hourly</label>
+          </p>
+          <p class="field">
+            <input type="radio" id="plan-daily" name="plan" value="daily" checked>
+            <label for="plan-daily">Daily</label>
+          </p>
+          <p class="field">
+            <input type="radio" id="plan-monthly" name="plan" value="monthly">
+            <label for="plan-monthly">Monthly</label>
+          </p>
+
+          <p>Add-ons:</p>
+          <p class="field">
+            <input type="checkbox" id="addon-projector" name="addon" value="Projector">
+            <label for="addon-projector">Projector</label>
+          </p>
+          <p class="field">
+            <input type="checkbox" id="addon-whiteboard" name="addon" value="Whiteboard">
+            <label for="addon-whiteboard">Whiteboard markers</label>
+          </p>
+          <p class="field">
+            <input type="checkbox" id="addon-refreshments" name="addon" value="Refreshments">
+            <label for="addon-refreshments">Tea and coffee</label>
+          </p>
+          <p class="field">
+            <input type="checkbox" id="addon-parking" name="addon" value="Parking">
+            <label for="addon-parking">Parking pass</label>
+          </p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Extra information</legend>
+
+          <p class="field">
+            <label for="book-notes">Special requests</label>
+            <textarea id="book-notes" name="notes" rows="4" cols="50" maxlength="200" placeholder="Anything we should know? (200 characters maximum)"></textarea>
+          </p>
+
+          <p class="field">
+            <label for="book-id-proof">ID proof (JPG, PNG or PDF)</label>
+            <input type="file" id="book-id-proof" name="id_proof" accept=".jpg,.png,.pdf" required>
+          </p>
+
+          <input type="hidden" id="booking-source" name="source" value="web-portal">
+
+          <p class="field">
+            <input type="checkbox" id="book-terms" name="terms" value="accepted" required>
+            <label for="book-terms">I agree to the cancellation policy</label>
+          </p>
+        </fieldset>
+
+        <button type="button" id="check-availability" class="btn btn-secondary">Check availability</button>
+        <button type="submit" class="btn btn-primary">Confirm booking</button>
+        <button type="reset" class="btn btn-secondary">Reset form</button>
+
+        <p id="booking-message" class="message" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <hr>
+
+    <!-- ---------- BOOKINGS TABLE (CRUD + status tracking) ---------- -->
+    <section id="bookings" class="role-member" aria-labelledby="bookings-title">
+      <h2 id="bookings-title">Bookings and status</h2>
+      <p class="section-intro">Track every booking from request to confirmation. Booking IDs look like <code>CS-0001</code>.</p>
+
+      <div class="table-wrap">
+        <table id="bookings-table" border="1">
+          <caption>Upcoming bookings</caption>
+          <colgroup>
+            <col class="col-id">
+            <col class="col-member">
+            <col span="3" class="col-details">
+            <col class="col-status">
+            <col class="col-actions">
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col" rowspan="2">Booking ID</th>
+              <th scope="col" rowspan="2">Member</th>
+              <th scope="col" colspan="3">Booking details</th>
+              <th scope="col" rowspan="2">Status</th>
+              <th scope="col" rowspan="2">Actions</th>
+            </tr>
+            <tr>
+              <th scope="col">Space</th>
+              <th scope="col">Date</th>
+              <th scope="col">Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">CS-0001</th>
+              <td>Riya Sharma</td>
+              <td>Hot Desk</td>
+              <td><time datetime="2026-11-24">24 Nov 2026</time></td>
+              <td>09:00 to 18:00</td>
+              <td class="status-confirmed">Confirmed</td>
+              <td>
+                <button type="button" class="btn-edit" aria-label="Edit booking CS-0001">Edit</button>
+                <button type="button" class="btn-cancel" aria-label="Cancel booking CS-0001">Cancel</button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">CS-0002</th>
+              <td>Karan Mehta</td>
+              <td>Meeting Room</td>
+              <td><time datetime="2026-11-24">24 Nov 2026</time></td>
+              <td>14:00 to 16:00</td>
+              <td class="status-pending">Pending</td>
+              <td>
+                <button type="button" class="btn-edit" aria-label="Edit booking CS-0002">Edit</button>
+                <button type="button" class="btn-cancel" aria-label="Cancel booking CS-0002">Cancel</button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">CS-0003</th>
+              <td>Simran Kaur</td>
+              <td>Dedicated Desk</td>
+              <td><time datetime="2026-11-25">25 Nov 2026</time></td>
+              <td>09:00 to 18:00</td>
+              <td class="status-confirmed">Confirmed</td>
+              <td>
+                <button type="button" class="btn-edit" aria-label="Edit booking CS-0003">Edit</button>
+                <button type="button" class="btn-cancel" aria-label="Cancel booking CS-0003">Cancel</button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">CS-0004</th>
+              <td>Arjun Verma</td>
+              <td>Private Office</td>
+              <td><time datetime="2026-11-26">26 Nov 2026</time></td>
+              <td>10:00 to 17:00</td>
+              <td class="status-pending">Pending</td>
+              <td>
+                <button type="button" class="btn-edit" aria-label="Edit booking CS-0004">Edit</button>
+                <button type="button" class="btn-cancel" aria-label="Cancel booking CS-0004">Cancel</button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">CS-0005</th>
+              <td>Neha Gupta</td>
+              <td>Hot Desk</td>
+              <td><time datetime="2026-11-26">26 Nov 2026</time></td>
+              <td>09:00 to 13:00</td>
+              <td class="status-cancelled">Cancelled</td>
+              <td>
+                <button type="button" class="btn-edit" aria-label="Edit booking CS-0005" disabled>Edit</button>
+                <button type="button" class="btn-cancel" aria-label="Cancel booking CS-0005" disabled>Cancel</button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">CS-0006</th>
+              <td>Harpreet Singh</td>
+              <td>Meeting Room</td>
+              <td><time datetime="2026-11-27">27 Nov 2026</time></td>
+              <td>11:00 to 12:00</td>
+              <td class="status-confirmed">Confirmed</td>
+              <td>
+                <button type="button" class="btn-edit" aria-label="Edit booking CS-0006">Edit</button>
+                <button type="button" class="btn-cancel" aria-label="Cancel booking CS-0006">Cancel</button>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th scope="row" colspan="6">Total bookings</th>
+              <td id="bookings-total">6</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- Notifications and confirmations -->
+      <h3 id="notifications-title">Notifications</h3>
+      <ul id="notification-list" aria-live="polite" aria-labelledby="notifications-title">
+        <li>Booking CS-0001 is confirmed. <button type="button" aria-label="Dismiss notification about CS-0001">&#10006;</button></li>
+        <li>Booking CS-0002 is waiting for staff approval. <button type="button" aria-label="Dismiss notification about CS-0002">&#10006;</button></li>
+        <li>Booking CS-0005 was cancelled by the member. <button type="button" aria-label="Dismiss notification about CS-0005">&#10006;</button></li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <!-- ---------- DASHBOARD (role-based views) ---------- -->
+    <section id="dashboard" aria-labelledby="dashboard-title">
+      <h2 id="dashboard-title">Dashboard</h2>
+      <p class="section-intro">A quick summary of today. Last updated: <time datetime="2026-11-23">23 Nov 2026</time>.</p>
+
+      <div class="card-grid">
+
+        <article class="card" id="summary-card">
+          <h3>Booking summary</h3>
+          <dl>
+            <dt>Total bookings</dt>
+            <dd><strong id="stat-total">6</strong></dd>
+            <dt>Confirmed</dt>
+            <dd><strong id="stat-confirmed">3</strong></dd>
+            <dt>Pending</dt>
+            <dd><strong id="stat-pending">2</strong></dd>
+            <dt>Cancelled</dt>
+            <dd><strong id="stat-cancelled">1</strong></dd>
+          </dl>
+        </article>
+
+        <article class="card" id="progress-card">
+          <h3>Progress</h3>
+          <p>
+            <label for="occupancy-meter">Desk occupancy today</label><br>
+            <meter id="occupancy-meter" value="65" min="0" max="100">65%</meter>
+            <strong>65%</strong>
+          </p>
+          <p>
+            <label for="approvals-progress">Bookings approved</label><br>
+            <progress id="approvals-progress" value="3" max="6">3 of 6</progress>
+            <strong>3 of 6</strong>
+          </p>
+        </article>
+
+        <article class="card" id="utilisation-card">
+          <h3>Utilisation by space</h3>
+          <ul>
+            <li>
+              <label for="meter-hot-desk">Hot Desk</label>
+              <meter id="meter-hot-desk" value="80" min="0" max="100">80%</meter>
+            </li>
+            <li>
+              <label for="meter-dedicated-desk">Dedicated Desk</label>
+              <meter id="meter-dedicated-desk" value="90" min="0" max="100">90%</meter>
+            </li>
+            <li>
+              <label for="meter-meeting-room">Meeting Room</label>
+              <meter id="meter-meeting-room" value="45" min="0" max="100">45%</meter>
+            </li>
+            <li>
+              <label for="meter-private-office">Private Office</label>
+              <meter id="meter-private-office" value="0" min="0" max="100">0%</meter>
+            </li>
+          </ul>
+        </article>
+      </div>
+
+      <!-- ADMIN ONLY: manage spaces (Create, Read, Update, Delete) -->
+      <article id="manage-spaces" class="role-admin">
+        <h3>Manage spaces (admin only)</h3>
+
+        <form id="space-form" name="space-form" action="" method="post" enctype="multipart/form-data" autocomplete="off">
+          <fieldset>
+            <legend>Add or update a space</legend>
+            <div class="form-grid">
+              <input type="hidden" id="space-id" name="space_id" value="">
+
+              <p class="field">
+                <label for="space-name">Space name</label>
+                <input type="text" id="space-name" name="space_name" placeholder="e.g. Quiet Pod" maxlength="40" required>
+              </p>
+
+              <p class="field">
+                <label for="space-type">Type</label>
+                <select id="space-type" name="space_type" required>
+                  <option value="">Choose a type</option>
+                  <optgroup label="Desks">
+                    <option value="hot-desk">Hot Desk</option>
+                    <option value="dedicated-desk">Dedicated Desk</option>
+                  </optgroup>
+                  <optgroup label="Rooms">
+                    <option value="meeting-room">Meeting Room</option>
+                    <option value="private-office">Private Office</option>
+                  </optgroup>
+                </select>
+              </p>
+
+              <p class="field">
+                <label for="space-capacity">Capacity</label>
+                <input type="number" id="space-capacity" name="capacity" min="1" max="100" step="1" required>
+              </p>
+
+              <p class="field">
+                <label for="space-price">Price (Rs.)</label>
+                <input type="number" id="space-price" name="price" min="0" max="50000" step="50" required>
+              </p>
+
+              <p class="field">
+                <label for="space-photo">Photo</label>
+                <input type="file" id="space-photo" name="space_photo" accept=".jpg,.png">
+              </p>
+            </div>
+
+            <p>Status:</p>
+            <p class="field">
+              <input type="radio" id="space-status-available" name="space_status" value="available" checked>
+              <label for="space-status-available">Available</label>
+            </p>
+            <p class="field">
+              <input type="radio" id="space-status-maintenance" name="space_status" value="maintenance">
+              <label for="space-status-maintenance">Under maintenance</label>
+            </p>
+          </fieldset>
+
+          <button type="submit" class="btn btn-primary">Save space</button>
+          <button type="reset" class="btn btn-secondary">Reset</button>
+          <p id="space-message" class="message" aria-live="polite"></p>
+        </form>
+
+        <div class="table-wrap">
+          <table id="spaces-table" border="1">
+            <caption>All spaces</caption>
+            <thead>
+              <tr>
+                <th scope="col">Space</th>
+                <th scope="col">Type</th>
+                <th scope="col">Capacity</th>
+                <th scope="col">Price (Rs.)</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Hot Desk</th>
+                <td>Desk</td>
+                <td>30</td>
+                <td>400</td>
+                <td class="status-available">Available</td>
+                <td>
+                  <button type="button" class="btn-edit" aria-label="Edit Hot Desk">Edit</button>
+                  <button type="button" class="btn-delete" aria-label="Delete Hot Desk">Delete</button>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Dedicated Desk</th>
+                <td>Desk</td>
+                <td>20</td>
+                <td>6,500</td>
+                <td class="status-available">Available</td>
+                <td>
+                  <button type="button" class="btn-edit" aria-label="Edit Dedicated Desk">Edit</button>
+                  <button type="button" class="btn-delete" aria-label="Delete Dedicated Desk">Delete</button>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Meeting Room</th>
+                <td>Room</td>
+                <td>10</td>
+                <td>600</td>
+                <td class="status-available">Available</td>
+                <td>
+                  <button type="button" class="btn-edit" aria-label="Edit Meeting Room">Edit</button>
+                  <button type="button" class="btn-delete" aria-label="Delete Meeting Room">Delete</button>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Private Office</th>
+                <td>Room</td>
+                <td>4</td>
+                <td>18,000</td>
+                <td class="status-maintenance">Under maintenance</td>
+                <td>
+                  <button type="button" class="btn-edit" aria-label="Edit Private Office">Edit</button>
+                  <button type="button" class="btn-delete" aria-label="Delete Private Office">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <hr>
+
+    <!-- ---------- REPORTS ---------- -->
+    <section id="reports" class="role-admin" aria-labelledby="reports-title">
+      <h2 id="reports-title">Reports</h2>
+      <p class="section-intro">Bookings and revenue by space type for the current month.</p>
+
+      <div class="table-wrap">
+        <table id="report-table" border="1">
+          <caption>Monthly booking report</caption>
+          <colgroup>
+            <col class="col-type">
+            <col span="2" class="col-numbers">
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col" colspan="3">November 2026</th>
+            </tr>
+            <tr>
+              <th scope="col">Space type</th>
+              <th scope="col">Bookings</th>
+              <th scope="col">Revenue (Rs.)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Hot Desk</th>
+              <td>48</td>
+              <td>19,200</td>
+            </tr>
+            <tr>
+              <th scope="row">Dedicated Desk</th>
+              <td>20</td>
+              <td>1,30,000</td>
+            </tr>
+            <tr>
+              <th scope="row">Meeting Room</th>
+              <td>36</td>
+              <td>21,600</td>
+            </tr>
+            <tr>
+              <th scope="row">Private Office</th>
+              <td>3</td>
+              <td>54,000</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th scope="row">Total</th>
+              <td>107</td>
+              <td>2,24,800</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <hr>
+
+    <!-- ---------- FAQ (details / summary) ---------- -->
+    <section id="faq" aria-labelledby="faq-title">
+      <h2 id="faq-title">Frequently asked questions</h2>
+
+      <details>
+        <summary>How do I cancel a booking?</summary>
+        <p>Open the <a href="#bookings">bookings table</a> and press Cancel next to your booking. You can cancel any booking that is still pending or confirmed.</p>
+      </details>
+
+      <details>
+        <summary>How long does confirmation take?</summary>
+        <p>Staff review requests during opening hours. You will see a notification as soon as the status changes from pending to confirmed.</p>
+      </details>
+
+      <details>
+        <summary>Which ID proof can I upload?</summary>
+        <p>Upload a clear JPG, PNG or PDF copy of a government-issued ID.</p>
+      </details>
+
+      <details>
+        <summary>Is <abbr title="Wireless Fidelity">Wi-Fi</abbr> included?</summary>
+        <p>Yes. Wi-Fi is free in every space, and tea or coffee is included with hot desks.</p>
+      </details>
+
+      <blockquote cite="https://cospace.example/reviews">
+        <p>I switched from spreadsheets to CoSpace and now my whole team books in one click.</p>
+        <p><cite>Riya Sharma, freelance designer</cite></p>
+      </blockquote>
+    </section>
+
+    <hr>
+
+    <!-- ---------- CONTACT ---------- -->
+    <section id="contact" aria-labelledby="contact-title">
+      <h2 id="contact-title">Contact us</h2>
+
+      <div class="card-grid">
+        <article class="card">
+          <h3>Send a message</h3>
+          <form id="contact-form" name="contact-form" action="" method="post" autocomplete="on">
+            <p class="field">
+              <label for="contact-name">Your name</label>
+              <input type="text" id="contact-name" name="name" placeholder="Enter your name" maxlength="40" required>
+            </p>
+
+            <p class="field">
+              <label for="contact-email">Email</label>
+              <input type="email" id="contact-email" name="email" placeholder="you@example.com" required>
+            </p>
+
+            <p class="field">
+              <label for="contact-topic">Topic</label>
+              <input type="text" id="contact-topic" name="topic" list="topics" placeholder="Choose or type a topic">
+              <datalist id="topics">
+                <option value="Booking help">
+                <option value="Billing">
+                <option value="Private Office waitlist">
+                <option value="Feedback">
+              </datalist>
+            </p>
+
+            <p class="field">
+              <label for="contact-message-text">Message</label>
+              <textarea id="contact-message-text" name="message" rows="4" cols="50" maxlength="300" required></textarea>
+            </p>
+
+            <button type="submit" class="btn btn-primary">Send message</button>
+            <button type="reset" class="btn btn-secondary">Reset</button>
+            <p id="contact-message" class="message" aria-live="polite"></p>
+          </form>
+        </article>
+
+        <article class="card">
+          <h3>Visit or call</h3>
+          <address>
+            CoSpace Coworking Centre<br>
+            2nd Floor, Innovation Block<br>
+            Punjab, India<br>
+            Email: <a href="mailto:hello@cospace.example">hello@cospace.example</a><br>
+            Phone: <a href="tel:+911234567890">+91 12345 67890</a>
+          </address>
+
+          <table>
+            <caption>Opening hours</caption>
+            <thead>
+              <tr>
+                <th scope="col">Day</th>
+                <th scope="col">Hours</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Monday to Saturday</td>
+                <td><time datetime="08:00">8:00 AM</time> to <time datetime="22:00">10:00 PM</time></td>
+              </tr>
+              <tr>
+                <td>Sunday</td>
+                <td>Closed</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+      </div>
+    </section>
+
+    <hr>
+
+    <!-- ---------- TEAM ---------- -->
+    <section id="team" aria-labelledby="team-title">
+      <h2 id="team-title">About the project</h2>
+      <p>CoSpace is the <strong>CSE326</strong> web project of <strong>Team 18, Code Crew</strong> (Section K3P26VA). It brings core records, bookings, status tracking and reports into one responsive web interface.</p>
+
+      <div class="table-wrap">
+        <table border="1">
+          <caption>Project team</caption>
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Registration No.</th>
+              <th scope="col">Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Aparajita Singh Raghuvanshi</th>
+              <td>12615983</td>
+              <td>Team leader</td>
+            </tr>
+            <tr>
+              <th scope="row">Swadha Sharma</th>
+              <td>12620183</td>
+              <td>Member 2</td>
+            </tr>
+            <tr>
+              <th scope="row">Arshita Jain</th>
+              <td>12616509</td>
+              <td>Member 3</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================== ASIDE: TIPS AND NOTICES ===================== -->
+  <aside id="tips" aria-labelledby="tips-title">
+    <h2 id="tips-title">Tips and notices</h2>
+    <ul>
+      <li><strong>Book early:</strong> Meeting rooms fill up fast on weekday afternoons.</li>
+      <li><em>Bring your ID:</em> staff may ask to see the ID you uploaded.</li>
+      <li>Keep calls to the meeting rooms so the shared area stays quiet.</li>
+      <li><mark>New:</mark> The Private Office is back soon. Join the <a href="#spaces">waitlist</a>.</li>
+    </ul>
+  </aside>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="site-footer">
+    <p>&copy; 2026 CoSpace Coworking Space Management. Built by Code Crew for CSE326.</p>
+    <nav aria-label="Footer navigation">
+      <ul>
+        <li><a href="#spaces">Spaces</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#top">Back to top</a></li>
+      </ul>
+    </nav>
+    <p><small>Student project for learning purposes. Prices and bookings shown are sample data.</small></p>
+  </footer>
+   <script src="javascript.js"></script>
+</body>
+</html>

@@ -1,0 +1,998 @@
+/* ==========================================================
+   CSE326 Project | Section K3P26VA | Team 18: Code Crew
+   Project: Coworking Space Management
+   PART 2 of 3: CSS  (style.css, linked from index.html)
+
+   CONTENTS
+   1.  Base styles (body, text, links, lists)
+   2.  Skip link, toast and message boxes
+   3.  Header and navigation
+   4.  Buttons
+   5.  Page layout (main, sections, cards, hero)
+   6.  Tables (borders, zebra, hover, status colours)
+   7.  Forms (inputs, select, textarea, checkbox, radio)
+   8.  Dashboard (meter, progress, stats)
+   9.  FAQ, quotes, notifications, aside, footer
+   10. Responsive rules (phones and small tablets)
+
+   NOTE FOR THE JS TEAMMATE
+   - To hide / show something, use the HTML "hidden" attribute.
+     It is forced to work in section 1 below.
+   - Message boxes (.message) are hidden while empty. Add the class
+     "error" to a message for a red box, e.g. message.className = "message error".
+   - The mobile menu is collapsed when #menu-toggle has
+     aria-expanded="false" (see section 10). Flip it with JS.
+   ========================================================== */
+
+
+/* ---------- 1. BASE STYLES ---------- */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: #f4f6fb;
+  color: #1f2a37;
+  font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Make the HTML hidden attribute always win */
+[hidden] {
+  display: none !important;
+}
+
+h1, h2, h3 {
+  font-family: Georgia, "Times New Roman", serif;
+  color: #1f3a68;
+  line-height: 1.25;
+}
+
+h1 {
+  font-size: 2.6em;
+  margin: 0 0 16px 0;
+  letter-spacing: -0.5px;
+}
+
+h2 {
+  font-size: 1.9em;
+  margin: 0 0 12px 0;
+  padding-bottom: 6px;
+  border-bottom: 3px solid #f2a900;
+  display: inline-block;
+}
+
+h3 {
+  font-size: 1.3em;
+  margin: 0 0 10px 0;
+}
+
+p {
+  margin: 0 0 14px 0;
+}
+
+a {
+  color: #1f4fa3;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+ul, ol {
+  padding-left: 24px;
+  margin: 0 0 14px 0;
+}
+
+li {
+  margin-bottom: 4px;
+}
+
+/* Nested lists keep the default disc, circle, square markers */
+
+dt {
+  font-weight: bold;
+  color: #1f3a68;
+}
+
+dd {
+  margin: 0 0 10px 0;
+}
+
+mark {
+  background-color: #ffe08a;
+  padding: 0 4px;
+  border-radius: 3px;
+}
+
+dfn {
+  font-style: normal;
+  font-weight: bold;
+  color: #1f3a68;
+}
+
+code {
+  background-color: #e8eef9;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: "Courier New", monospace;
+}
+
+del {
+  color: #8a94a6;
+}
+
+ins {
+  color: #1b7f3b;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+small {
+  color: #5b6678;
+}
+
+address {
+  font-style: normal;
+  line-height: 1.9;
+  margin-bottom: 16px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #d5ddec;
+  margin: 40px 0;
+}
+
+figure {
+  margin: 0 0 14px 0;
+}
+
+figcaption {
+  font-size: 14px;
+  font-style: italic;
+  color: #5b6678;
+  text-align: center;
+  margin-top: 6px;
+}
+
+/* Keyboard focus must always be visible */
+a:focus, button:focus, summary:focus {
+  outline: 3px solid #f2a900;
+  outline-offset: 2px;
+}
+
+
+/* ---------- 2. SKIP LINK, TOAST, MESSAGES ---------- */
+
+/* Skip link: off-screen until it receives keyboard focus */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 8px;
+  background-color: #f2a900;
+  color: #1f2a37;
+  padding: 10px 16px;
+  font-weight: bold;
+  border-radius: 4px;
+  z-index: 300;
+}
+
+.skip-link:focus {
+  left: 8px;
+}
+
+.message {
+  padding: 10px 14px;
+  margin: 12px 0;
+  border-radius: 6px;
+  border-left: 5px solid #1b7f3b;
+  background-color: #e6f4ea;
+  color: #14532d;
+}
+
+.message.error {
+  border-left-color: #b3261e;
+  background-color: #fdecea;
+  color: #7a1912;
+}
+
+/* An empty message box takes no space */
+.message:empty {
+  display: none;
+}
+
+/* Toast: short pop-up message in the top-right corner */
+#toast {
+  position: fixed;
+  top: 84px;
+  right: 20px;
+  max-width: 320px;
+  z-index: 200;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.25);
+}
+
+
+/* ---------- 3. HEADER AND NAVIGATION ---------- */
+
+.site-header {
+  background-color: #1f3a68;
+  color: white;
+  padding: 10px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.logo {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.logo a {
+  color: white;
+  text-decoration: none;
+}
+
+.logo strong {
+  font-family: Georgia, "Times New Roman", serif;
+  letter-spacing: 1px;
+}
+
+.logo small {
+  font-size: 0.5em;
+  font-weight: normal;
+  color: #c5d2ea;
+  margin-left: 6px;
+}
+
+#menu-toggle {
+  display: none;
+}
+
+#menu-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+}
+
+#menu-list li {
+  margin: 0;
+}
+
+.site-nav a {
+  display: inline-block;
+  color: white;
+  padding: 8px 9px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.site-nav a:hover {
+  background-color: rgba(255, 255, 255, 0.18);
+  text-decoration: none;
+}
+
+.site-nav a:active {
+  background-color: #f2a900;
+  color: #1f2a37;
+}
+
+/* Current page link, selected by its aria-current attribute */
+.site-nav a[aria-current=page] {
+  border-bottom: 3px solid #f2a900;
+  border-radius: 4px 4px 0 0;
+}
+
+/* The Login / Register button inside the menu */
+.site-nav .btn-primary {
+  background-color: #f2a900;
+  color: #1f2a37;
+  border-color: #f2a900;
+  font-weight: bold;
+  margin: 0 0 0 4px;
+  padding: 8px 14px;
+}
+
+.site-nav .btn-primary:hover {
+  background-color: #ffc83d;
+  border-color: #ffc83d;
+  color: #1f2a37;
+}
+
+
+/* ---------- 4. BUTTONS ---------- */
+
+/* Shared look for every .btn (links and buttons) */
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  margin: 4px 8px 4px 0;
+  border: 2px solid #1f3a68;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+}
+
+.btn:hover {
+  text-decoration: none;
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+.btn-primary {
+  background-color: #1f3a68;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #14284a;
+  color: white;
+  box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.35);
+}
+
+.btn-secondary {
+  background-color: white;
+  color: #1f3a68;
+}
+
+.btn-secondary:hover {
+  background-color: #e8eef9;
+  color: #1f3a68;
+}
+
+/* Small buttons inside tables */
+.btn-edit, .btn-cancel, .btn-delete {
+  padding: 6px 12px;
+  margin: 2px;
+  background-color: white;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-edit {
+  color: #1f3a68;
+  border: 1px solid #1f3a68;
+}
+
+.btn-edit:hover:enabled {
+  background-color: #e8eef9;
+}
+
+.btn-cancel, .btn-delete {
+  color: #b3261e;
+  border: 1px solid #b3261e;
+}
+
+.btn-cancel:hover:enabled, .btn-delete:hover:enabled {
+  background-color: #b3261e;
+  color: white;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+
+/* ---------- 5. PAGE LAYOUT ---------- */
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 20px 0 20px;
+}
+
+/* Leave room for the sticky header when jumping to a section */
+section {
+  scroll-margin-top: 80px;
+}
+
+.section-intro {
+  max-width: 700px;
+  color: #4a5568;
+  font-size: 1.05em;
+}
+
+/* Hero */
+.hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 32px;
+  background-color: #e3ebf8;
+  border-radius: 12px;
+  padding: 32px;
+}
+
+.hero-text {
+  flex: 1 1 320px;
+}
+
+.hero-text p {
+  font-size: 1.1em;
+}
+
+.hero-figure {
+  flex: 1 1 320px;
+  margin: 0;
+}
+
+.hero-figure img {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.25);
+}
+
+/* Cards */
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin: 24px 0;
+}
+
+.card {
+  flex: 1 1 280px;
+  background-color: white;
+  border: 1px solid #d5ddec;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.18);
+}
+
+/* Space cards sit two per row on desktop */
+.space-card {
+  flex: 1 1 400px;
+}
+
+.space-card img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+/* Admin panel */
+#manage-spaces {
+  background-color: white;
+  border: 1px solid #d5ddec;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 24px;
+}
+
+#search-result-count {
+  font-weight: bold;
+  color: #4a5568;
+  margin-top: 16px;
+}
+
+
+/* ---------- 6. TABLES ---------- */
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+table, th, td {
+  border: 1px solid #d5ddec;
+}
+
+th, td {
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+caption {
+  caption-side: top;
+  text-align: left;
+  font-weight: bold;
+  color: #1f3a68;
+  padding: 0 0 8px 0;
+}
+
+thead th {
+  background-color: #1f3a68;
+  color: white;
+  border-color: #3c5a8c;
+}
+
+/* Header cells that span several columns are centred */
+th[colspan] {
+  text-align: center;
+}
+
+tbody th {
+  background-color: transparent;
+  color: #1f2a37;
+}
+
+tfoot th, tfoot td {
+  background-color: #e3ebf8;
+  font-weight: bold;
+}
+
+/* Wrapper that lets wide tables scroll sideways on phones */
+.table-wrap {
+  overflow-x: auto;
+  margin-bottom: 24px;
+}
+
+#bookings-table {
+  min-width: 760px;
+}
+
+/* Column widths set through the colgroup */
+.col-id {
+  width: 110px;
+}
+
+.col-status {
+  width: 120px;
+}
+
+.col-actions {
+  width: 170px;
+}
+
+/* Zebra stripes and hover highlight */
+.table-wrap tbody tr:nth-child(even) {
+  background-color: #f1f5fb;
+}
+
+.table-wrap tbody tr:hover, .card tbody tr:hover {
+  background-color: #fff1c9;
+}
+
+#report-table td {
+  text-align: right;
+}
+
+/* Status colours. The dot is added with ::before, so
+   colour is never the only way to read the status. */
+.status-confirmed, .status-pending, .status-cancelled,
+.status-available, .status-maintenance {
+  font-weight: bold;
+}
+
+.status-confirmed::before, .status-pending::before, .status-cancelled::before,
+.status-available::before, .status-maintenance::before {
+  content: "\25CF  ";
+}
+
+.status-confirmed, .status-available {
+  color: #1b7f3b;
+}
+
+.status-pending {
+  color: #a35a00;
+}
+
+.status-maintenance {
+  color: #8a5a00;
+}
+
+.status-cancelled {
+  color: #b3261e;
+}
+
+
+/* ---------- 7. FORMS ---------- */
+
+fieldset {
+  border: 1px solid #c9d3e6;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 0 0 20px 0;
+  background-color: white;
+}
+
+legend {
+  font-weight: bold;
+  color: #1f3a68;
+  padding: 0 8px;
+}
+
+.field {
+  margin: 0 0 14px 0;
+}
+
+.form-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.form-grid .field {
+  flex: 1 1 220px;
+  margin: 0;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+form small {
+  display: block;
+  margin-top: 4px;
+}
+
+/* Controls inherit the page font */
+input, select, textarea, button {
+  font-family: inherit;
+  font-size: 16px;
+}
+
+/* Text-like inputs, select and textarea share one look */
+input[type=text], input[type=email], input[type=password], input[type=tel],
+input[type=number], input[type=date], input[type=time], input[type=search],
+select, textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 2px 0;
+  border: 2px solid #b8c2d6;
+  border-radius: 6px;
+  background-color: white;
+  color: #1f2a37;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+input[type=text]:focus, input[type=email]:focus, input[type=password]:focus,
+input[type=tel]:focus, input[type=number]:focus, input[type=date]:focus,
+input[type=time]:focus, input[type=search]:focus, select:focus, textarea:focus {
+  background-color: #eaf2ff;
+  border-color: #1f3a68;
+  outline: 3px solid #f2a900;
+  outline-offset: 1px;
+}
+
+::placeholder {
+  color: #8a94a6;
+}
+
+/* Read-only field (booking ID) looks locked */
+input[readonly] {
+  background-color: #eceff5;
+  color: #4a5568;
+}
+
+textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+select {
+  cursor: pointer;
+}
+
+input[type=file] {
+  width: 100%;
+  padding: 10px;
+  border: 2px dashed #b8c2d6;
+  border-radius: 6px;
+  background-color: #f8faff;
+  cursor: pointer;
+}
+
+/* Checkboxes and radio buttons */
+input[type=checkbox], input[type=radio] {
+  width: 20px;
+  height: 20px;
+  accent-color: #1f3a68;
+  cursor: pointer;
+  vertical-align: middle;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+input[type=checkbox]:hover, input[type=radio]:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+}
+
+input[type=checkbox]:active, input[type=radio]:active {
+  transform: scale(0.95);
+}
+
+/* The label next to a checkbox / radio sits on the same line */
+.field input[type=checkbox] + label, .field input[type=radio] + label {
+  display: inline;
+  margin-left: 8px;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+/* ---------- 8. DASHBOARD ---------- */
+
+#summary-card dl {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+}
+
+#summary-card dt {
+  flex: 0 0 65%;
+  padding: 8px 0;
+  border-bottom: 1px solid #e3e9f4;
+}
+
+#summary-card dd {
+  flex: 0 0 35%;
+  margin: 0;
+  padding: 8px 0;
+  text-align: right;
+  border-bottom: 1px solid #e3e9f4;
+}
+
+#summary-card dd strong {
+  font-size: 1.5em;
+  color: #1f3a68;
+}
+
+meter, progress {
+  height: 18px;
+  vertical-align: middle;
+}
+
+#progress-card meter, #progress-card progress {
+  width: 60%;
+}
+
+#utilisation-card ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+#utilisation-card meter {
+  width: 100%;
+}
+
+
+/* ---------- 9. FAQ, QUOTES, NOTIFICATIONS, ASIDE, FOOTER ---------- */
+
+details {
+  background-color: white;
+  border: 1px solid #d5ddec;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 10px 0;
+}
+
+summary {
+  cursor: pointer;
+  font-weight: bold;
+  color: #1f3a68;
+}
+
+details[open] summary {
+  margin-bottom: 8px;
+  border-bottom: 1px solid #e3e9f4;
+  padding-bottom: 8px;
+}
+
+blockquote {
+  background-color: white;
+  border-left: 5px solid #f2a900;
+  border-radius: 0 8px 8px 0;
+  margin: 28px 0;
+  padding: 14px 22px;
+  font-style: italic;
+}
+
+blockquote cite {
+  font-style: normal;
+  font-weight: bold;
+  color: #1f3a68;
+}
+
+/* Notifications list */
+#notification-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+#notification-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  border: 1px solid #d5ddec;
+  border-left: 5px solid #1f3a68;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin: 8px 0;
+}
+
+#notification-list button {
+  border: none;
+  background-color: transparent;
+  color: #5b6678;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px 8px;
+  transition: transform 0.2s, color 0.2s;
+}
+
+#notification-list button:hover {
+  color: #b3261e;
+  transform: scale(1.3);
+}
+
+/* Aside: tips and notices */
+#tips {
+  width: 90%;
+  max-width: 1060px;
+  margin: 32px auto;
+  padding: 20px 28px;
+  background-color: #fff6dc;
+  border-left: 6px solid #f2a900;
+  border-radius: 8px;
+}
+
+#tips h2 {
+  font-size: 1.4em;
+  border-bottom: none;
+  margin-bottom: 8px;
+}
+
+/* Footer */
+.site-footer {
+  background-color: #1b2536;
+  color: #cbd5e1;
+  text-align: center;
+  padding: 28px 20px;
+}
+
+.site-footer ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 24px;
+}
+
+.site-footer a {
+  color: white;
+}
+
+.site-footer small {
+  color: #94a3b8;
+}
+
+
+/* ---------- 10. RESPONSIVE RULES ---------- */
+
+/* Phones and small tablets */
+@media (max-width: 700px) {
+
+  h1 {
+    font-size: 2em;
+  }
+
+  h2 {
+    font-size: 1.5em;
+  }
+
+  main {
+    padding: 20px 14px 0 14px;
+  }
+
+  .hero {
+    padding: 20px;
+  }
+
+  /* Menu button appears and the menu stacks */
+  .site-nav {
+    width: 100%;
+  }
+
+  #menu-toggle {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    padding: 8px 14px;
+    background-color: transparent;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 4px;
+    font-size: 22px;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  #menu-list {
+    flex-direction: column;
+    align-items: stretch;
+    margin-top: 8px;
+  }
+
+  /* JS sets aria-expanded="false" to collapse the menu */
+  #menu-toggle[aria-expanded=false] + #menu-list {
+    display: none;
+  }
+
+  .site-nav .btn-primary {
+    margin: 6px 0 0 0;
+  }
+
+  /* Cards, form fields and space cards use the full width */
+  .card, .space-card {
+    flex-basis: 100%;
+  }
+
+  .form-grid .field {
+    flex-basis: 100%;
+  }
+
+  #summary-card dt {
+    flex-basis: 60%;
+  }
+
+  #summary-card dd {
+    flex-basis: 40%;
+  }
+
+  #progress-card meter, #progress-card progress {
+    width: 100%;
+  }
+
+  #toast {
+    left: 14px;
+    right: 14px;
+    max-width: none;
+  }
+}
+
+/* Respect people who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
